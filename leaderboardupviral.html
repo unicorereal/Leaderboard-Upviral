@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bảng xếp hạng - Winnet Upviral</title>
+  <style>
+    body {font-family: "Segoe UI", sans-serif; margin: 0; padding: 20px; background: #f9fafb;}
+    #leaderboard {max-width: 500px; margin: auto; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+    #leaderboard ul {list-style: none; padding: 0; margin: 0;}
+    #leaderboard li {padding: 10px 0; border-bottom: 1px solid #eee;}
+    #leaderboard li:nth-child(1) strong {color: #eab308;} /* top 1 */
+    #leaderboard li:nth-child(2) strong {color: #9ca3af;} /* top 2 */
+    #leaderboard li:nth-child(3) strong {color: #f97316;} /* top 3 */
+    #leaderboard h3 {text-align: center; margin-bottom: 15px;}
+  </style>
+</head>
+<body>
+  <div id="leaderboard"><p>Đang tải bảng xếp hạng...</p></div>
+  <script>
+    fetch("https://script.google.com/macros/s/AKfycbwuof7Dtfnrs72dDu4jmwZVM1TWmlNZOn1p-LYWSxbGqi58VRi4--F9uvyqWVPuW0gF/exec")
+    .then(r => r.text())
+    .then(t => {
+      let json;
+      try { json = JSON.parse(t); }
+      catch(e){
+        const fixed = t.replace(/^{\s*"leaderboard"\s*:\s*/,'{"leaderboard":[')
+                       .replace(/},\s*{/g,'},{')
+                       .replace(/}\s*$/,']}');
+        json = JSON.parse(fixed);
+      }
+      const arr = Object.values(json.leaderboard);
+      const html = `<h3>🏆 Top 10 người giới thiệu nhiều nhất</h3><ul>` + 
+        arr.map((r,i)=>`<li><strong>#${i+1}</strong> ${r["0"]} — <span>${r["2"]} lượt</span></li>`).join('') + `</ul>`;
+      document.getElementById("leaderboard").innerHTML = html;
+    })
+    .catch(err => document.getElementById("leaderboard").innerHTML = "<p>Lỗi tải dữ liệu</p>");
+  </script>
+</body>
+</html>
