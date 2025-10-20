@@ -30,7 +30,7 @@
   document.getElementById("leaderboard").innerHTML = cache;
   } else {
     // Tải dữ liệu mới từ GitHub JSON
-    fetch("https://raw.githubusercontent.com/unicorereal/Leaderboard-Upviral/main/leaderboard.json?time=" + Math.floor(Date.now()/600000))
+    fetch("https://raw.githubusercontent.com/unicorereal/Leaderboard-Upviral/main/leaderboardupviral.json?time=" + Math.floor(Date.now()/600000))
     .then(r => r.json())
     .then(json => {
       const arr = Object.values(json.leaderboard);
