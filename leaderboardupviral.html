@@ -17,23 +17,36 @@
 <body>
   <div id="leaderboard"><p>Đang tải bảng xếp hạng...</p></div>
   <script>
-    fetch("https://script.google.com/macros/s/AKfycbwuof7Dtfnrs72dDu4jmwZVM1TWmlNZOn1p-LYWSxbGqi58VRi4--F9uvyqWVPuW0gF/exec")
-    .then(r => r.text())
-    .then(t => {
-      let json;
-      try { json = JSON.parse(t); }
-      catch(e){
-        const fixed = t.replace(/^{\s*"leaderboard"\s*:\s*/,'{"leaderboard":[')
-                       .replace(/},\s*{/g,'},{')
-                       .replace(/}\s*$/,']}');
-        json = JSON.parse(fixed);
-      }
+  const cacheKey = "leaderboard_cache";
+  const cacheTimeKey = "leaderboard_cache_time";
+  const cacheDuration = 10 * 60 * 1000; // 10 phút (tính bằng milliseconds)
+
+  const now = Date.now();
+  const cache = localStorage.getItem(cacheKey);
+  const lastTime = localStorage.getItem(cacheTimeKey);
+
+  if (cache && lastTime && now - lastTime < cacheDuration) {
+  // Dùng dữ liệu cache trong trình duyệt
+  document.getElementById("leaderboard").innerHTML = cache;
+  } else {
+    // Tải dữ liệu mới từ GitHub JSON
+    fetch("https://raw.githubusercontent.com/unicorereal/Leaderboard-Upviral/main/leaderboard.json?time=" + Math.floor(Date.now()/600000))
+    .then(r => r.json())
+    .then(json => {
       const arr = Object.values(json.leaderboard);
       const html = `<h3>🏆 Top 10 người giới thiệu nhiều nhất</h3><ul>` + 
-        arr.map((r,i)=>`<li><strong>#${i+1}</strong> ${r["0"]} — <span>${r["2"]} lượt</span></li>`).join('') + `</ul>`;
+         arr.map((r,i)=>`<li><strong>#${i+1}</strong> ${r["0"]} — <span>${r["2"]} lượt</span></li>`).join('') + 
+        `</ul>`;
       document.getElementById("leaderboard").innerHTML = html;
+
+      // Lưu vào cache để dùng trong 10 phút tiếp theo
+      localStorage.setItem(cacheKey, html);
+      localStorage.setItem(cacheTimeKey, now);
     })
-    .catch(err => document.getElementById("leaderboard").innerHTML = "<p>Lỗi tải dữ liệu</p>");
+    .catch(() => {
+      document.getElementById("leaderboard").innerHTML = "<p>Lỗi tải dữ liệu</p>";
+    });
+  }
   </script>
 </body>
 </html>
