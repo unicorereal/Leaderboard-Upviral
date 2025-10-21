@@ -4,14 +4,67 @@
   <meta charset="UTF-8">
   <title>Bảng xếp hạng - Winnet Upviral</title>
   <style>
-    body {font-family: "Segoe UI", sans-serif; margin: 0; padding: 20px; background: #f9fafb;}
-    #leaderboard {max-width: 500px; margin: auto; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
-    #leaderboard ul {list-style: none; padding: 0; margin: 0;}
-    #leaderboard li {padding: 10px 0; border-bottom: 1px solid #eee;}
-    #leaderboard li:nth-child(1) strong {color: #eab308;} /* top 1 */
-    #leaderboard li:nth-child(2) strong {color: #9ca3af;} /* top 2 */
-    #leaderboard li:nth-child(3) strong {color: #f97316;} /* top 3 */
-    #leaderboard h3 {text-align: center; margin-bottom: 15px;}
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: transparent; /* nền trong suốt */
+    }
+  
+    #leaderboard {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(255,255,255,0.9); /* hơi mờ nhẹ, có thể bỏ nếu muốn hoàn toàn trong suốt */
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+  
+    #leaderboard h3 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #111827;
+      font-weight: 600;
+    }
+  
+    #leaderboard ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    #leaderboard li {
+      display: grid;
+      grid-template-columns: 60px 1fr 80px; /* 3 cột: xếp hạng - tên - điểm */
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 15px;
+    }
+  
+    #leaderboard li strong {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+    }
+  
+    #leaderboard li span {
+      text-align: right;
+      font-weight: 500;
+      color: #374151;
+    }
+  
+    /* Màu nổi bật cho top 1–3 */
+    #leaderboard li:nth-child(1) strong { color: #eab308; }
+    #leaderboard li:nth-child(2) strong { color: #9ca3af; }
+    #leaderboard li:nth-child(3) strong { color: #f97316; }
+  
+    /* Hiệu ứng hover */
+    #leaderboard li:hover {
+      background: rgba(243, 244, 246, 0.6);
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
   </style>
 </head>
 <body>
